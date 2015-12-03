@@ -45,6 +45,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "shell", path: "script.sh"
 
+  # Make puppet avail inside machine
+  #config.vm.provision "puppet"
+
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
