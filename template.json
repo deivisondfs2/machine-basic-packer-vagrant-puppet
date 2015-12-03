@@ -1,7 +1,7 @@
 {
   "variables": {
     "version": "20151130.0.0",
-    "cloud_token": "aIWCrhUDdWhCnA.atlasv1.voxkOXxp1QEZDvvLEGGGahIShY6ve9TkOzT0OURQvMNh5ygLZ1AsxxtpZjYPl3zi314"
+    "cloud_token": "YOUR_TOKEN"
   },
   "builders": [{   
     "type": "virtualbox-iso",
