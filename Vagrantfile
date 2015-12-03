@@ -1,6 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+unless Vagrant.has_plugin?('vagrant-puppet-install') 
+  raise "É necessário instalar o plugin 'vagrant-puppet-install' através do comando: vagrant plugin install vagrant-puppet-install"
+end
+
 # Checa se o Librarian está instalado (necessário para baixar as dependências)
 unless Vagrant.has_plugin?('vagrant-librarian-puppet') 
   raise "É necessário instalar o plugin 'vagrant-librarian-puppet' através do comando: vagrant plugin install vagrant-librarian-puppet"
