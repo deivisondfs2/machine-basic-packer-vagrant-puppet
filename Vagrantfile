@@ -10,11 +10,16 @@ unless Vagrant.has_plugin?('vagrant-librarian-puppet')
   raise "É necessário instalar o plugin 'vagrant-librarian-puppet' através do comando: vagrant plugin install vagrant-librarian-puppet"
 end
 
+# If hostsupdater plugin is installed, add all server names as aliases.
+unless Vagrant.has_plugin?("vagrant-hostsupdater")
+  raise "É necessário instalar o plugin 'vagrant-hostsupdater' através do comando: vagrant plugin install vagrant-hostsupdater"
+end
+
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
 nodes = [  
-  { :ip => '192.168.33.10', :box => 'ubuntu1404', :ram => 512 }
+  { :ip => '192.168.33.10', :box => 'ubuntu1404', :ram => 512, :vhost => 'machine.new' }
 ]
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -44,6 +49,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :private_network, ip: node[:ip]
 
   config.vm.provision "shell", path: "script.sh"
+
+  #=========================================================================
+  #=========================================================================
+  #=========== Obrigatorio ======>  sudo visudo <===========================
+  #=========================================================================
+  #=========================================================================
+  # Allow passwordless startup of Vagrant with vagrant-hostsupdater.
+  #Cmnd_Alias VAGRANT_HOSTS_ADD = /bin/sh -c echo "*" >> /etc/hosts
+  #Cmnd_Alias VAGRANT_HOSTS_REMOVE = /usr/bin/sed -i -e /*/ d /etc/hosts
+  #%admin ALL=(root) NOPASSWD: VAGRANT_HOSTS_ADD, VAGRANT_HOSTS_REMOVE
+  #=========================================================================
+  #=========================================================================
+  #=========================================================================
+  #=========================================================================
+
+
+  # If hostsupdater plugin is installed, add all server names as aliases.
+  if Vagrant.has_plugin?("vagrant-hostsupdater")
+    # Add all hosts that aren't defined as Ansible vars.
+    config.hostsupdater.aliases = []
+    config.hostsupdater.aliases.push(node[:vhost])
+  end
 
   # Make puppet avail inside machine
   #config.vm.provision "puppet"
@@ -140,5 +167,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # chef-validator, unless you changed the configuration.
   #
   #   chef.validation_client_name = "ORGNAME-validator"
-end
+  end
 end
